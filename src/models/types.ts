@@ -5,7 +5,7 @@ export type ID = string;
 export interface Option {
   id: ID;
   text: string;
-  isCorrect?: boolean; // Server-only flag (not returned to client when fetching questions)
+  isCorrect?: boolean | undefined; // Server-only flag (not returned to client when fetching questions)
 }
 
 export type QuestionType = 'single' | 'multiple' | 'text';
@@ -14,8 +14,8 @@ export interface Question {
   id: ID;
   text: string;
   type: QuestionType;
-  options?: Option[]; // Optional for text questions
-  maxWords?: number;  // For text questions (e.g., 300)
+  options?: Option[] | undefined; // Optional for text questions
+  maxWords?: number | undefined;  // For text questions (e.g., 300)
 }
 
 export interface Quiz {
@@ -61,8 +61,8 @@ export interface GetQuestionsResponse {
   options?: Array<{
     id: ID;
     text: string;
-  }>;
-  maxWords?: number;
+  }> | undefined;
+  maxWords?: number | undefined;
 }
 
 export interface Answer {

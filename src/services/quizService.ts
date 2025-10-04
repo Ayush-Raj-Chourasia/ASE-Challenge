@@ -84,7 +84,7 @@ class QuizStore {
       id: questionId,
       text: request.text,
       type: request.type,
-      options,
+      options: options || undefined,
       maxWords: request.maxWords
     };
 

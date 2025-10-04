@@ -11,7 +11,7 @@ export interface ApiError extends Error {
 export function createApiError(message: string, statusCode: number = 500, code?: string): ApiError {
   const error = new Error(message) as ApiError;
   error.statusCode = statusCode;
-  error.code = code;
+  error.code = code || 'INTERNAL_SERVER_ERROR';
   return error;
 }
 
@@ -32,27 +32,29 @@ export function errorHandler(
   error: ApiError,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): void {
   const statusCode = error.statusCode || 500;
   const message = error.message || 'Internal server error';
   const code = error.code || 'INTERNAL_SERVER_ERROR';
 
-  // Log error for debugging
-  console.error(`Error ${statusCode}: ${message}`, {
-    url: req.url,
-    method: req.method,
-    body: req.body,
-    params: req.params,
-    query: req.query,
-    stack: error.stack
-  });
+  // Log error for debugging (only in non-test environments)
+  if (process.env['NODE_ENV'] !== 'test') {
+    console.error(`Error ${statusCode}: ${message}`, {
+      url: req.url,
+      method: req.method,
+      body: req.body,
+      params: req.params,
+      query: req.query,
+      stack: error.stack
+    });
+  }
 
   // Don't expose stack traces in production
   const response: ValidationError = {
     error: message,
     code,
-    details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    details: process.env['NODE_ENV'] === 'development' ? error.stack || '' : ''
   };
 
   res.status(statusCode).json(response);

@@ -30,7 +30,7 @@ export class QuizController {
   }
 
   // GET /quizzes
-  static async getAllQuizzes(req: Request, res: Response, next: NextFunction): Promise<void> {
+  static async getAllQuizzes(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const summaries = QuizService.getAllQuizSummaries();
       
@@ -43,7 +43,7 @@ export class QuizController {
   // GET /quizzes/:quizId
   static async getQuiz(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const quizId: ID = req.params.quizId;
+      const quizId: ID = req.params['quizId']!;
       const quiz = QuizService.getQuiz(quizId);
       
       if (!quiz) {
@@ -65,7 +65,7 @@ export class QuizController {
   // POST /quizzes/:quizId/questions
   static async addQuestion(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const quizId: ID = req.params.quizId;
+      const quizId: ID = req.params['quizId']!;
       const request: AddQuestionRequest = req.body;
       
       // Check if quiz exists
@@ -95,7 +95,7 @@ export class QuizController {
   // GET /quizzes/:quizId/questions
   static async getQuestions(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const quizId: ID = req.params.quizId;
+      const quizId: ID = req.params['quizId']!;
       
       // Check if quiz exists
       const quiz = QuizService.getQuiz(quizId);
@@ -113,7 +113,7 @@ export class QuizController {
         options: question.options?.map(option => ({
           id: option.id,
           text: option.text
-        })),
+        })) || undefined,
         maxWords: question.maxWords
       }));
       
@@ -126,7 +126,7 @@ export class QuizController {
   // POST /quizzes/:quizId/submit
   static async submitQuiz(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const quizId: ID = req.params.quizId;
+      const quizId: ID = req.params['quizId']!;
       const request: SubmitQuizRequest = req.body;
       
       // Check if quiz exists
@@ -150,7 +150,7 @@ export class QuizController {
   // DELETE /quizzes/:quizId
   static async deleteQuiz(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const quizId: ID = req.params.quizId;
+      const quizId: ID = req.params['quizId']!;
       
       const deleted = QuizService.deleteQuiz(quizId);
       if (!deleted) {

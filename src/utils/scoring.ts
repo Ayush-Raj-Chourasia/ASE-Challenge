@@ -111,7 +111,7 @@ function scoreTextQuestion(question: Question, answer: Answer): number {
 
   // Normalize both the answer and the correct answer
   const normalizedAnswer = answer.textAnswer.trim().toLowerCase();
-  const normalizedCorrectAnswer = question.options[0].text.trim().toLowerCase();
+  const normalizedCorrectAnswer = question.options?.[0]?.text.trim().toLowerCase();
 
   return normalizedAnswer === normalizedCorrectAnswer ? 1 : 0;
 }
