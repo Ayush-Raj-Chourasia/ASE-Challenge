@@ -136,7 +136,7 @@ export class QuizController {
       }
       
       // Validate answers against quiz questions
-      await this.validateAnswers(quiz.questions, request.answers);
+      QuizController.validateAnswers(quiz.questions, request.answers);
       
       // Score the quiz
       const result = scoreQuiz(quiz.questions, request.answers);
@@ -164,7 +164,7 @@ export class QuizController {
   }
 
   // Helper method to validate answers
-  private static async validateAnswers(questions: any[], answers: Answer[]): Promise<void> {
+  private static validateAnswers(questions: any[], answers: Answer[]): void {
     const questionMap = new Map(questions.map(q => [q.id, q]));
     
     for (const answer of answers) {
